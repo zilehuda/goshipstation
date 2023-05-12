@@ -159,7 +159,7 @@ if updateResponse.Success {
 
 ## Contribution
 
-Contributions to goShipstation are welcome! If you find a bug or want to suggest an improvement, please open an issue or submit a pull request on the [GitHub repository](https://github.com/example/goShipstation).
+Contributions to goShipstation are welcome! If you find a bug or want to suggest an improvement, please open an issue or submit a pull request on the [GitHub repository](https://github.com/zilehuda/goshipstation).
 
 Before making a contribution, please ensure that you:
 
