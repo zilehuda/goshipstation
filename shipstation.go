@@ -2,7 +2,6 @@ package shipstation
 
 import (
 	"bytes"
-	"fmt"
 	"net/http"
 )
 
@@ -22,6 +21,11 @@ func NewShipStation(apiKey, apiSecret string) *ShipStation {
 	}
 }
 
+// SetBaseURL sets the base URL for ShipStation API.
+func (s *ShipStation) SetBaseURL(baseURL string) {
+	s.baseURL = baseURL
+}
+
 func (s *ShipStation) sendRequest(method, urlStr string, actionName string, payload []byte) (*http.Response, error) {
 	req, err := http.NewRequest(method, urlStr, bytes.NewBuffer(payload))
 	if err != nil {
@@ -29,15 +33,10 @@ func (s *ShipStation) sendRequest(method, urlStr string, actionName string, payl
 	}
 	req.Header.Set("Content-Type", "application/json")
 	s.setBasicAuth(req)
-
 	client := http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to %s. Status code: %d", actionName, resp.StatusCode)
 	}
 
 	return resp, nil

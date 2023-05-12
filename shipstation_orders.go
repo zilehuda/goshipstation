@@ -3,6 +3,8 @@ package shipstation
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"net/http"
 )
 
 type DeleteOrderResponse struct {
@@ -144,10 +146,15 @@ type AdvancedOptions struct {
 func (s *ShipStation) AddOrder(orderData []byte) (*Order, error) {
 	url := fmt.Sprintf("%s/orders/createorder", s.baseURL)
 	resp, err := s.sendRequest("POST", url, "create/update order", orderData)
-	defer resp.Body.Close()
 	if err != nil {
-		panic(err)
 		return nil, err
+	}
+	defer resp.Body.Close()
+
+	// Check if the response status code is OK
+	if resp.StatusCode != http.StatusOK {
+		body, _ := ioutil.ReadAll(resp.Body)
+		return nil, fmt.Errorf("failed to add order. Status code: %d and error message: %s", resp.StatusCode, string(body))
 	}
 
 	// Parse the response
@@ -164,9 +171,15 @@ func (s *ShipStation) GetOrder(orderID int) (*Order, error) {
 	url := fmt.Sprintf("%s/orders/%d", s.baseURL, orderID)
 
 	resp, err := s.sendRequest("GET", url, "retrieve order", nil)
-	defer resp.Body.Close()
 	if err != nil {
 		return nil, err
+	}
+	defer resp.Body.Close()
+
+	// Check if the response status code is OK
+	if resp.StatusCode != http.StatusOK {
+		body, _ := ioutil.ReadAll(resp.Body)
+		return nil, fmt.Errorf("failed to retrieve order. Status code: %d and error message: %s", resp.StatusCode, string(body))
 	}
 
 	// Parse the response
@@ -179,15 +192,19 @@ func (s *ShipStation) GetOrder(orderID int) (*Order, error) {
 	return &order, nil
 }
 
-// GetOrders retrieves an all orders from ShipStation
 func (s *ShipStation) GetOrders() (*OrdersResponse, error) {
 	url := fmt.Sprintf("%s/orders", s.baseURL)
 
 	resp, err := s.sendRequest("GET", url, "retrieve orders", nil)
-	defer resp.Body.Close()
-
 	if err != nil {
 		return nil, err
+	}
+	defer resp.Body.Close()
+
+	// Check if the response status code is OK
+	if resp.StatusCode != http.StatusOK {
+		body, _ := ioutil.ReadAll(resp.Body)
+		return nil, fmt.Errorf("failed to retrieve orders. Status code: %d and error message: %s", resp.StatusCode, string(body))
 	}
 
 	// Parse the response
@@ -196,18 +213,23 @@ func (s *ShipStation) GetOrders() (*OrdersResponse, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return &ordersResponse, nil
 }
 
-// DeleteOrder delete an order from ShipStation based on the order number.
 func (s *ShipStation) DeleteOrder(orderID int) (*DeleteOrderResponse, error) {
 	url := fmt.Sprintf("%s/orders/%d", s.baseURL, orderID)
 
-	resp, err := s.sendRequest("DELETE", url, "retrieve order", nil)
-	defer resp.Body.Close()
-
+	resp, err := s.sendRequest("DELETE", url, "delete order", nil)
 	if err != nil {
 		return nil, err
+	}
+	defer resp.Body.Close()
+
+	// Check if the response status code is OK
+	if resp.StatusCode != http.StatusOK {
+		body, _ := ioutil.ReadAll(resp.Body)
+		return nil, fmt.Errorf("failed to delete order. Status code: %d and error message: %s", resp.StatusCode, string(body))
 	}
 
 	// Parse the response
@@ -216,5 +238,6 @@ func (s *ShipStation) DeleteOrder(orderID int) (*DeleteOrderResponse, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return &deleteOrderResponse, nil
 }
