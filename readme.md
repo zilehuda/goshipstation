@@ -21,7 +21,7 @@ import "github.com/zilehuda/goshipstation"
 Create a new ShipStation client by providing your ShipStation API credentials:
 
 ```go
-client := shipstation.NewClient("YOUR_API_KEY", "YOUR_API_SECRET")
+client := shipstation.NewShipStation("YOUR_API_KEY", "YOUR_API_SECRET")
 ```
 
 ### Orders
