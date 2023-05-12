@@ -192,7 +192,7 @@ Once your contribution is submitted, it will be reviewed by the project maintain
 
 ## License
 
-goShipstation is released under the [MIT License](https://opensource.org/licenses/MIT). Please refer to the [LICENSE](https://github.com/example/goShipstation/blob/main/LICENSE) file for more information.
+goShipstation is released under the [MIT License](https://opensource.org/licenses/MIT). Please refer to the [LICENSE](https://github.com/zilehuda/goShipstation/blob/main/LICENSE) file for more information.
 
 ---
 
